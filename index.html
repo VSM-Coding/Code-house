@@ -417,7 +417,7 @@
       max-width: 680px;
       border-radius: 22px 22px 0 0;
       border-top: 1px solid var(--border);
-      padding: 18px 16px 26px;
+      padding: 0 16px 26px;
       max-height: 90dvh;
       overflow-y: auto;
       overscroll-behavior: contain;
@@ -435,10 +435,16 @@
     }
 
     .modal-header {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      background: var(--card);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 14px;
+      padding: 16px 0 12px;
+      margin-bottom: 6px;
+      border-bottom: 1px solid rgba(51, 65, 85, 0.45);
     }
 
     .modal-title {
@@ -496,12 +502,6 @@
       padding: 5px 10px;
       border-radius: 8px;
       cursor: pointer;
-    }
-
-    .row-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
     }
 
     .quick-symbols {
@@ -717,15 +717,9 @@
           <div class="address-suggestions" id="addressSuggestions"></div>
         </div>
 
-        <div class="row-2">
-          <div class="form-group">
-            <label for="entranceInput">Подъезд</label>
-            <input type="text" id="entranceInput" placeholder="2, Калитка, Двор..." />
-          </div>
-          <div class="form-group">
-            <label for="floorAptInput">Этаж / Кв. (необяз.)</label>
-            <input type="text" id="floorAptInput" placeholder="5 эт, кв 42" />
-          </div>
+        <div class="form-group">
+          <label for="entranceInput">Подъезд</label>
+          <input type="text" id="entranceInput" placeholder="2, Калитка, Двор..." />
         </div>
 
         <div class="form-group">
@@ -887,7 +881,6 @@
       return `${d.getDate()} ${months[d.getMonth()]}`;
     }
 
-    // Цифры светло-голубые, буквы и спецсимволы просто жёлтые
     function formatColoredCode(code) {
       return Array.from(String(code || '')).map(ch => {
         if (ch === ' ') return ' ';
@@ -964,6 +957,9 @@
         }
 
         if (e.target.classList.contains('modal-backdrop')) {
+          if (e.target.id === 'backupModal' && document.getElementById('codeImportArea').value.trim().length > 0) {
+            return;
+          }
           closeModal(e.target.id);
           return;
         }
@@ -1074,7 +1070,9 @@
     function renderList() {
       const container = document.getElementById('listContainer');
       const rawQuery = document.getElementById('searchInput').value;
-      const queryTokens = normalizeText(rawQuery).split(' ').filter(Boolean);
+      const normQuery = normalizeText(rawQuery);
+      const queryTokens = normQuery.split(' ').filter(Boolean);
+      const compactQuery = normQuery.replace(/\s+/g, '');
 
       const filtered = entries.filter(item => {
         if (activeFilter !== 'Все') {
@@ -1085,13 +1083,13 @@
         const haystack = normalizeText([
           item.address,
           item.entrance,
-          item.floorApt,
           item.code,
           item.note,
           ...(item.tags || [])
         ].join(' '));
 
-        return queryTokens.every(token => haystack.includes(token));
+        const compactHaystack = haystack.replace(/\s+/g, '');
+        return queryTokens.every(token => haystack.includes(token)) || compactHaystack.includes(compactQuery);
       });
 
       document.getElementById('statsBadge').textContent = `${entries.length}`;
@@ -1134,7 +1132,6 @@
           const entranceLabel = item.entrance
             ? `Подъезд: <strong>${escapeHtml(item.entrance)}</strong>`
             : 'Основной';
-          const floorInfo = item.floorApt ? ` · ${escapeHtml(item.floorApt)}` : '';
           const dateStr = formatShortDate(item.updatedAt);
 
           const codeHtml = item.code
@@ -1156,7 +1153,7 @@
             <div class="entrance-item">
               <div class="entrance-main">
                 <div class="entrance-left">
-                  <span class="entrance-badge">${entranceLabel}${floorInfo}</span>
+                  <span class="entrance-badge">${entranceLabel}</span>
                   ${codeHtml}
                 </div>
                 <div class="item-actions">
@@ -1219,7 +1216,6 @@
       document.getElementById('formTitle').textContent = 'Редактировать запись';
       document.getElementById('addressInput').value = item.address || '';
       document.getElementById('entranceInput').value = item.entrance || '';
-      document.getElementById('floorAptInput').value = item.floorApt || '';
       document.getElementById('codeInput').value = item.code || '';
       document.getElementById('noteInput').value = item.note || '';
 
@@ -1235,7 +1231,6 @@
       const id = document.getElementById('entryId').value;
       const address = document.getElementById('addressInput').value.trim();
       const entrance = document.getElementById('entranceInput').value.trim();
-      const floorApt = document.getElementById('floorAptInput').value.trim();
       const code = document.getElementById('codeInput').value.trim();
       const note = document.getElementById('noteInput').value.trim();
       const tags = Array.from(selectedTags);
@@ -1249,7 +1244,6 @@
             ...entries[idx],
             address,
             entrance,
-            floorApt,
             code,
             tags,
             note,
@@ -1262,7 +1256,6 @@
           id: `${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
           address,
           entrance,
-          floorApt,
           code,
           tags,
           note,
@@ -1367,7 +1360,6 @@
           id: String(item.id || `${Date.now()}-${idx}-${Math.random().toString(36).slice(2, 5)}`),
           address: String(item.address || item.a || '').trim(),
           entrance: String(item.entrance || item.e || '').trim(),
-          floorApt: String(item.floorApt || item.f || '').trim(),
           code: String(item.code || item.c || '').trim(),
           tags: Array.isArray(item.tags || item.t) ? (item.tags || item.t) : [],
           note: String(item.note || item.n || '').trim(),
