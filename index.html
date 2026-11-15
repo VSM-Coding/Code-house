@@ -271,7 +271,7 @@
       font-size: 14px;
     }
 
-    /* Оформление кода домофона: цифры и буквы/символы разного цвета */
+    /* Оформление кода домофона: цифры светлые, буквы и спецсимволы жёлтые */
     .code-box {
       background: var(--code-bg);
       color: var(--code-digit);
@@ -281,7 +281,7 @@
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       font-size: 21px;
       font-weight: 800;
-      letter-spacing: 1px;
+      letter-spacing: 0.8px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
@@ -304,10 +304,6 @@
 
     .code-sym {
       color: var(--code-sym);
-      background: rgba(251, 191, 36, 0.16);
-      border-radius: 4px;
-      padding: 0 2px;
-      margin: 0 1px;
     }
 
     .copy-hint {
@@ -723,7 +719,7 @@
 
         <div class="row-2">
           <div class="form-group">
-            <label for="entranceInput">Подъезд / Вход</label>
+            <label for="entranceInput">Подъезд</label>
             <input type="text" id="entranceInput" placeholder="2, Калитка, Двор..." />
           </div>
           <div class="form-group">
@@ -891,7 +887,7 @@
       return `${d.getDate()} ${months[d.getMonth()]}`;
     }
 
-    // Подсветка цифр и букв/спецсимволов разными цветами
+    // Цифры светло-голубые, буквы и спецсимволы просто жёлтые
     function formatColoredCode(code) {
       return Array.from(String(code || '')).map(ch => {
         if (ch === ' ') return ' ';
@@ -1136,8 +1132,8 @@
 
         const itemsHtml = group.items.map(item => {
           const entranceLabel = item.entrance
-            ? `Подъезд / вход: <strong>${escapeHtml(item.entrance)}</strong>`
-            : 'Основной вход';
+            ? `Подъезд: <strong>${escapeHtml(item.entrance)}</strong>`
+            : 'Основной';
           const floorInfo = item.floorApt ? ` · ${escapeHtml(item.floorApt)}` : '';
           const dateStr = formatShortDate(item.updatedAt);
 
