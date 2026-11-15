@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="mobile-web-app-capable" content="yes" />
   <meta name="theme-color" content="#0f172a" />
   <title>Курьер: Домофоны и Адреса</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔑</text></svg>">
@@ -17,7 +18,6 @@
       --text: #f8fafc;
       --muted: #94a3b8;
       --accent: #38bdf8;
-      --accent-dark: #0284c7;
       --code-bg: #172554;
       --code-text: #7dd3fc;
       --danger: #ef4444;
@@ -34,7 +34,7 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
       background: var(--bg);
       color: var(--text);
-      padding-bottom: 96px;
+      padding-bottom: 98px;
       line-height: 1.4;
     }
 
@@ -43,10 +43,10 @@
       position: sticky;
       top: 0;
       z-index: 20;
-      background: rgba(15, 23, 42, 0.95);
+      background: rgba(15, 23, 42, 0.96);
       backdrop-filter: blur(10px);
       border-bottom: 1px solid var(--border);
-      padding: 12px 16px;
+      padding: 12px 16px 10px;
     }
 
     .top-bar {
@@ -71,7 +71,7 @@
       font-size: 12px;
       color: var(--muted);
       background: var(--card);
-      padding: 4px 10px;
+      padding: 3px 9px;
       border-radius: 999px;
       border: 1px solid var(--border);
     }
@@ -87,9 +87,15 @@
       border: 1px solid var(--border);
       color: var(--text);
       border-radius: 10px;
-      padding: 7px 10px;
+      padding: 7px 11px;
       font-size: 14px;
+      font-weight: 600;
       cursor: pointer;
+    }
+
+    .icon-btn.accent-outline {
+      border-color: rgba(56, 189, 248, 0.45);
+      color: var(--accent);
     }
 
     .icon-btn:active {
@@ -108,7 +114,7 @@
       border: 1px solid var(--border);
       color: var(--text);
       font-size: 16px;
-      padding: 12px 42px 12px 14px;
+      padding: 11px 42px 11px 14px;
       border-radius: 12px;
       outline: none;
     }
@@ -137,6 +143,40 @@
 
     .clear-search.visible {
       display: flex;
+    }
+
+    /* Быстрые фильтры */
+    .filter-bar {
+      display: flex;
+      gap: 7px;
+      overflow-x: auto;
+      max-width: 680px;
+      margin: 9px auto 0;
+      padding-bottom: 2px;
+      scrollbar-width: none;
+    }
+
+    .filter-bar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .filter-chip {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 5px 11px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .filter-chip.active {
+      background: rgba(56, 189, 248, 0.18);
+      border-color: var(--accent);
+      color: var(--text);
     }
 
     /* Основной контейнер */
@@ -178,11 +218,15 @@
       color: var(--accent);
       border: 1px solid rgba(56, 189, 248, 0.35);
       border-radius: 10px;
-      padding: 6px 10px;
+      padding: 7px 11px;
       font-size: 13px;
-      font-weight: 600;
+      font-weight: 700;
       white-space: nowrap;
       cursor: pointer;
+    }
+
+    .add-entrance-btn:active {
+      transform: scale(0.96);
     }
 
     .entrances-list {
@@ -192,7 +236,7 @@
 
     .entrance-item {
       padding: 12px 14px;
-      border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+      border-bottom: 1px solid rgba(51, 65, 85, 0.55);
       display: flex;
       flex-direction: column;
       gap: 8px;
@@ -220,7 +264,7 @@
     .entrance-badge {
       background: var(--card-inner);
       border: 1px solid var(--border);
-      padding: 5px 10px;
+      padding: 6px 10px;
       border-radius: 8px;
       font-weight: 600;
       font-size: 14px;
@@ -229,8 +273,8 @@
     .code-box {
       background: var(--code-bg);
       color: var(--code-text);
-      border: 1px solid rgba(56, 189, 248, 0.4);
-      padding: 6px 12px;
+      border: 1px solid rgba(56, 189, 248, 0.45);
+      padding: 6px 13px;
       border-radius: 10px;
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       font-size: 20px;
@@ -240,20 +284,28 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
+      user-select: none;
     }
 
     .code-box:active {
-      transform: scale(0.97);
+      transform: scale(0.96);
     }
 
     .copy-hint {
       font-size: 12px;
-      opacity: 0.8;
+      opacity: 0.85;
     }
 
     .item-actions {
       display: flex;
+      align-items: center;
       gap: 6px;
+    }
+
+    .date-label {
+      font-size: 11px;
+      color: var(--muted);
+      margin-right: 2px;
     }
 
     .mini-btn {
@@ -266,9 +318,13 @@
       cursor: pointer;
     }
 
+    .mini-btn:active {
+      transform: scale(0.95);
+    }
+
     .mini-btn.del {
       color: #fca5a5;
-      border-color: rgba(239, 68, 68, 0.3);
+      border-color: rgba(239, 68, 68, 0.35);
     }
 
     .tags-row {
@@ -287,8 +343,8 @@
 
     .note-text {
       font-size: 14px;
-      color: var(--muted);
-      background: rgba(15, 23, 42, 0.55);
+      color: #cbd5e1;
+      background: rgba(15, 23, 42, 0.6);
       padding: 8px 10px;
       border-radius: 8px;
       white-space: pre-wrap;
@@ -296,16 +352,16 @@
 
     .empty-state {
       text-align: center;
-      padding: 48px 20px;
+      padding: 52px 20px;
       color: var(--muted);
     }
 
     /* Кнопка добавления (FAB) */
     .fab {
       position: fixed;
-      bottom: 22px;
-      right: 20px;
-      left: 20px;
+      bottom: 20px;
+      right: 16px;
+      left: 16px;
       max-width: 648px;
       margin: 0 auto;
       background: var(--accent);
@@ -328,7 +384,7 @@
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(2, 6, 23, 0.8);
+      background: rgba(2, 6, 23, 0.82);
       backdrop-filter: blur(4px);
       display: none;
       align-items: flex-end;
@@ -346,9 +402,10 @@
       max-width: 680px;
       border-radius: 22px 22px 0 0;
       border-top: 1px solid var(--border);
-      padding: 20px 18px 28px;
-      max-height: 92vh;
+      padding: 18px 16px 26px;
+      max-height: 90dvh;
       overflow-y: auto;
+      overscroll-behavior: contain;
     }
 
     @media (min-width: 640px) {
@@ -366,7 +423,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     .modal-title {
@@ -375,14 +432,14 @@
     }
 
     .form-group {
-      margin-bottom: 14px;
+      margin-bottom: 13px;
     }
 
     label {
       display: block;
       font-size: 13px;
       color: var(--muted);
-      margin-bottom: 6px;
+      margin-bottom: 5px;
       font-weight: 600;
     }
 
@@ -402,6 +459,30 @@
       border-color: var(--accent);
     }
 
+    textarea.code-textarea {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .address-suggestions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 7px;
+    }
+
+    .addr-sug-chip {
+      background: rgba(56, 189, 248, 0.14);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 5px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
     .row-2 {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -419,9 +500,9 @@
       background: var(--card-inner);
       border: 1px solid var(--border);
       color: var(--accent);
-      font-weight: 700;
+      font-weight: 800;
       font-size: 16px;
-      padding: 8px 0;
+      padding: 9px 0;
       border-radius: 10px;
       cursor: pointer;
     }
@@ -467,45 +548,108 @@
       margin-top: 6px;
     }
 
-    /* Уведомление */
+    .save-btn:active {
+      transform: scale(0.98);
+    }
+
+    /* Уведомление + кнопка отмены */
     .toast {
       position: fixed;
       top: 16px;
       left: 50%;
-      transform: translateX(-50%) translateY(-80px);
+      transform: translateX(-50%) translateY(-100px);
       background: var(--success);
       color: #052e16;
       font-weight: 700;
-      padding: 10px 18px;
+      padding: 10px 16px;
       border-radius: 999px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-      transition: transform 0.25s ease;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      transition: transform 0.22s ease;
       z-index: 100;
       font-size: 14px;
-      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      max-width: 92vw;
     }
 
     .toast.show {
       transform: translateX(-50%) translateY(0);
     }
 
+    .toast-undo {
+      background: #052e16;
+      color: #bbf7d0;
+      border: none;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    /* Разделы модалки Код / Бэкап */
+    .section-box {
+      background: rgba(15, 23, 42, 0.55);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 13px;
+      margin-bottom: 12px;
+    }
+
+    .section-box:last-child {
+      margin-bottom: 0;
+    }
+
+    .section-heading {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .backup-info {
+      margin: 0 0 10px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
     .backup-panel {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 9px;
     }
 
     .backup-btn {
       width: 100%;
-      padding: 13px;
-      border-radius: 12px;
+      padding: 12px;
+      border-radius: 11px;
       border: 1px solid var(--border);
-      background: var(--card-inner);
+      background: var(--card);
       color: var(--text);
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 600;
       cursor: pointer;
       text-align: center;
+      display: block;
+    }
+
+    .backup-btn.primary {
+      background: var(--accent);
+      color: #082f49;
+      border-color: var(--accent);
+      font-weight: 800;
+    }
+
+    .backup-btn.danger-outline {
+      border-color: rgba(239, 68, 68, 0.35);
+      color: #fca5a5;
+      background: transparent;
+      font-size: 13px;
+    }
+
+    .backup-btn:active {
+      transform: scale(0.98);
     }
   </style>
 </head>
@@ -515,7 +659,7 @@
     <div class="top-bar">
       <div class="title">🔑 База домофонов <span class="stats" id="statsBadge">0</span></div>
       <div class="header-actions">
-        <button class="icon-btn" onclick="openBackupModal()" title="Резервная копия">💾 База</button>
+        <button type="button" class="icon-btn accent-outline" id="openBackupBtn">📥 Код / База</button>
       </div>
     </div>
     <div class="search-wrap">
@@ -523,26 +667,27 @@
         type="text"
         id="searchInput"
         class="search-input"
-        placeholder="Поиск: улица, дом, код или заметка..."
+        placeholder="Поиск: улица, дом, подъезд или код..."
         autocomplete="off"
       />
-      <button class="clear-search" id="clearSearchBtn" onclick="clearSearch()">✕</button>
+      <button type="button" class="clear-search" id="clearSearchBtn" aria-label="Очистить">✕</button>
     </div>
+    <div class="filter-bar" id="filterBar"></div>
   </header>
 
   <main id="listContainer"></main>
 
-  <button class="fab" onclick="openFormModal()">+ Добавить адрес / код</button>
+  <button type="button" class="fab" id="openAddBtn">+ Добавить адрес / код</button>
 
-  <!-- Модалка добавления/редактирования -->
-  <div class="modal-backdrop" id="formModal" onclick="backdropClose(event, 'formModal')">
+  <!-- Модалка добавления/редактирования записи -->
+  <div class="modal-backdrop" id="formModal">
     <div class="modal">
       <div class="modal-header">
         <div class="modal-title" id="formTitle">Новая запись</div>
-        <button class="icon-btn" onclick="closeModal('formModal')">✕</button>
+        <button type="button" class="icon-btn" data-close-modal="formModal">✕</button>
       </div>
 
-      <form id="entryForm" onsubmit="saveEntry(event)">
+      <form id="entryForm">
         <input type="hidden" id="entryId" />
 
         <div class="form-group">
@@ -550,11 +695,11 @@
           <input
             type="text"
             id="addressInput"
-            list="savedAddresses"
             placeholder="Например: ул. Ленина, 15"
+            autocomplete="off"
             required
           />
-          <datalist id="savedAddresses"></datalist>
+          <div class="address-suggestions" id="addressSuggestions"></div>
         </div>
 
         <div class="row-2">
@@ -570,13 +715,13 @@
 
         <div class="form-group">
           <label for="codeInput">Код от домофона / ворот</label>
-          <input type="text" id="codeInput" placeholder="Например: #4512 или 12К3456" />
+          <input type="text" id="codeInput" placeholder="Например: #4512 или 12К3456" autocomplete="off" />
           <div class="quick-symbols">
-            <button type="button" class="sym-btn" onclick="appendSymbol('#')">#</button>
-            <button type="button" class="sym-btn" onclick="appendSymbol('*')">*</button>
-            <button type="button" class="sym-btn" onclick="appendSymbol('К')">К</button>
-            <button type="button" class="sym-btn" onclick="appendSymbol('В')">В</button>
-            <button type="button" class="sym-btn" onclick="appendSymbol('B')">B</button>
+            <button type="button" class="sym-btn" data-sym="#">#</button>
+            <button type="button" class="sym-btn" data-sym="*">*</button>
+            <button type="button" class="sym-btn" data-sym="К">К</button>
+            <button type="button" class="sym-btn" data-sym="В">В</button>
+            <button type="button" class="sym-btn" data-sym="B">B</button>
           </div>
         </div>
 
@@ -595,30 +740,57 @@
     </div>
   </div>
 
-  <!-- Модалка экспорта/импорта -->
-  <div class="modal-backdrop" id="backupModal" onclick="backdropClose(event, 'backupModal')">
+  <!-- Модалка загрузки по коду и резервного копирования -->
+  <div class="modal-backdrop" id="backupModal">
     <div class="modal">
       <div class="modal-header">
-        <div class="modal-title">Резервная копия базы</div>
-        <button class="icon-btn" onclick="closeModal('backupModal')">✕</button>
+        <div class="modal-title">Код базы и бэкап</div>
+        <button type="button" class="icon-btn" data-close-modal="backupModal">✕</button>
       </div>
-      <div class="backup-panel">
-        <p style="margin:0; font-size:14px; color:var(--muted);">
-          Все адреса хранятся прямо в вашем телефоне. Скачивайте копию раз в пару недель, чтобы не потерять базу.
+
+      <div class="section-box">
+        <div class="section-heading">1. Загрузить адреса по коду</div>
+        <p class="backup-info">
+          Вставь код, полученный в чате или мессенджере (формат <code>KEYDB:...</code> или <code>[...]</code>). Новые адреса добавятся к твоим.
         </p>
-        <button class="backup-btn" onclick="exportData()">⬇️ Скачать файл базы (.json)</button>
-        <label class="backup-btn" style="cursor:pointer;">
-          ⬆️ Загрузить из файла (.json)
-          <input type="file" accept=".json" onchange="importData(event)" style="display:none;" />
-        </label>
+        <div class="form-group" style="margin-bottom: 9px;">
+          <textarea
+            id="codeImportArea"
+            class="code-textarea"
+            rows="4"
+            placeholder="Вставь сюда код базы..."
+          ></textarea>
+        </div>
+        <button type="button" class="backup-btn primary" id="applyCodeBtn">✅ Загрузить адреса из кода</button>
+      </div>
+
+      <div class="section-box">
+        <div class="section-heading">2. Сохранить бэкап или переслать</div>
+        <p class="backup-info" id="backupInfoText">
+          В памяти телефона: 0 записей.
+        </p>
+        <div class="backup-panel">
+          <button type="button" class="backup-btn" id="copyCodeBtn">📋 Скопировать код для мессенджера (KEYDB)</button>
+          <button type="button" class="backup-btn" id="exportFileBtn">⬇️ Скачать файлом на телефон (.json)</button>
+          <label class="backup-btn" style="cursor:pointer;">
+            ⬆️ Загрузить из файла (.json)
+            <input type="file" id="importFileInput" accept=".json,application/json" style="display:none;" />
+          </label>
+          <button type="button" class="backup-btn danger-outline" id="clearAllBtn">🗑️ Очистить всю базу на телефоне</button>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="toast" id="toast">Скопировано!</div>
+  <div class="toast" id="toast">
+    <span id="toastText">Скопировано!</span>
+    <button type="button" class="toast-undo" id="toastUndoBtn" style="display:none;">Отменить</button>
+  </div>
 
   <script>
     const STORAGE_KEY = 'courier_intercom_db_v1';
+    const CODE_PREFIX = 'KEYDB:';
+
     const PRESET_TAGS = [
       '🔑 Вездеход',
       '🚧 Шлагбаум',
@@ -628,140 +800,301 @@
       '🐕 Собака',
       '⚠️ Не работает'
     ];
+    const QUICK_FILTERS = ['Все', '🔑 Вездеход', '🚧 Шлагбаум', '🚪 Калитка', '⚠️ Не работает'];
 
+    // Изначально база полностью пуста
     let entries = [];
     let selectedTags = new Set();
+    let activeFilter = 'Все';
+    let lastDeletedSnapshot = null;
+    let clearConfirmPending = false;
 
-    // Инициализация
-    function init() {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        try {
-          entries = JSON.parse(raw);
-        } catch (e) {
-          entries = [];
-        }
-      } else {
-        // Стартовые примеры при первом запуске
-        entries = [
-          {
-            id: 'demo-1',
-            address: 'ул. Примерная, 10',
-            entrance: '1',
-            floorApt: '',
-            code: '#4815',
-            tags: ['🔑 Вездеход'],
-            note: 'Пример записи. Нажми на код, чтобы скопировать, или удали карточку.',
-            updatedAt: Date.now()
-          },
-          {
-            id: 'demo-2',
-            address: 'ул. Примерная, 10',
-            entrance: 'Калитка',
-            floorApt: '',
-            code: '*1234#',
-            tags: ['🚪 Калитка'],
-            note: 'Вход со стороны парковки',
-            updatedAt: Date.now() - 1000
-          }
-        ];
-        saveToStorage();
+    function attachManifest() {
+      const manifest = {
+        name: 'Курьер: База домофонов',
+        short_name: 'Домофоны',
+        start_url: '.',
+        display: 'standalone',
+        background_color: '#0f172a',
+        theme_color: '#0f172a',
+        icons: [{
+          src: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%231e293b'/><text x='50' y='68' font-size='58' text-anchor='middle'>🔑</text></svg>",
+          sizes: '192x192',
+          type: 'image/svg+xml'
+        }]
+      };
+      const blob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
+      const link = document.createElement('link');
+      link.rel = 'manifest';
+      link.href = URL.createObjectURL(blob);
+      document.head.appendChild(link);
+    }
+
+    function encodeBase64Utf8(str) {
+      const bytes = new TextEncoder().encode(str);
+      let bin = '';
+      for (let i = 0; i < bytes.length; i++) {
+        bin += String.fromCharCode(bytes[i]);
       }
+      return btoa(bin);
+    }
 
+    function decodeBase64Utf8(b64) {
+      const bin = atob(b64);
+      const bytes = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) {
+        bytes[i] = bin.charCodeAt(i);
+      }
+      return new TextDecoder().decode(bytes);
+    }
+
+    function normalizeText(str) {
+      return String(str || '')
+        .toLowerCase()
+        .replace(/ё/g, 'е')
+        .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()«»"']/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    function normalizeAddressKey(addr) {
+      return normalizeText(addr)
+        .replace(/\b(ул|улица|пер|переулок|пр|проспект|пр-т|ш|шоссе|б-р|бульвар|пл|площадь|д|дом)\b/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    function formatShortDate(ts) {
+      if (!ts) return '';
+      const now = new Date();
+      const d = new Date(ts);
+      if (now.toDateString() === d.toDateString()) return 'сегодня';
+      const months = ['янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
+      return `${d.getDate()} ${months[d.getMonth()]}`;
+    }
+
+    function loadLocalState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) entries = parsed;
+        }
+      } catch (e) {
+        entries = [];
+      }
+    }
+
+    function saveToStorage() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+    }
+
+    function init() {
+      attachManifest();
+      loadLocalState();
+      bindEvents();
+      renderFilterBar();
       renderPresetTags();
       renderList();
-      updateAddressDatalist();
+    }
 
+    function bindEvents() {
       const searchInput = document.getElementById('searchInput');
       searchInput.addEventListener('input', () => {
         document.getElementById('clearSearchBtn').classList.toggle('visible', searchInput.value.length > 0);
         renderList();
       });
+
+      document.getElementById('clearSearchBtn').addEventListener('click', () => {
+        searchInput.value = '';
+        document.getElementById('clearSearchBtn').classList.remove('visible');
+        renderList();
+        searchInput.focus();
+      });
+
+      document.getElementById('openAddBtn').addEventListener('click', () => openFormModal());
+      document.getElementById('openBackupBtn').addEventListener('click', openBackupModal);
+      document.getElementById('entryForm').addEventListener('submit', saveEntry);
+      document.getElementById('addressInput').addEventListener('input', renderAddressSuggestions);
+
+      document.querySelectorAll('#formModal input, #formModal textarea').forEach(el => {
+        el.addEventListener('focus', () => {
+          setTimeout(() => {
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }, 260);
+        });
+      });
+
+      // Кнопки загрузки кода и бэкапа
+      document.getElementById('applyCodeBtn').addEventListener('click', handleCodeImport);
+      document.getElementById('copyCodeBtn').addEventListener('click', copyShareableCode);
+      document.getElementById('exportFileBtn').addEventListener('click', exportDataFile);
+      document.getElementById('importFileInput').addEventListener('change', importDataFile);
+      document.getElementById('clearAllBtn').addEventListener('click', handleClearAll);
+      document.getElementById('toastUndoBtn').addEventListener('click', undoDelete);
+
+      // Единый обработчик кликов
+      document.addEventListener('click', (e) => {
+        const closeTarget = e.target.closest('[data-close-modal]');
+        if (closeTarget) {
+          closeModal(closeTarget.dataset.closeModal);
+          return;
+        }
+
+        if (e.target.classList.contains('modal-backdrop')) {
+          closeModal(e.target.id);
+          return;
+        }
+
+        const filterChip = e.target.closest('[data-filter]');
+        if (filterChip) {
+          activeFilter = filterChip.dataset.filter;
+          renderFilterBar();
+          renderList();
+          return;
+        }
+
+        const copyBtn = e.target.closest('[data-copy-code]');
+        if (copyBtn) {
+          copyText(copyBtn.dataset.copyCode, `Скопировано: ${copyBtn.dataset.copyCode}`);
+          return;
+        }
+
+        const addEntBtn = e.target.closest('[data-add-address]');
+        if (addEntBtn) {
+          openFormModal(addEntBtn.dataset.addAddress);
+          return;
+        }
+
+        const sugChip = e.target.closest('[data-pick-address]');
+        if (sugChip) {
+          const addrInput = document.getElementById('addressInput');
+          addrInput.value = sugChip.dataset.pickAddress;
+          renderAddressSuggestions();
+          document.getElementById('entranceInput').focus();
+          return;
+        }
+
+        const editBtn = e.target.closest('[data-edit-id]');
+        if (editBtn) {
+          editEntry(editBtn.dataset.editId);
+          return;
+        }
+
+        const delBtn = e.target.closest('[data-delete-id]');
+        if (delBtn) {
+          deleteEntry(delBtn.dataset.deleteId);
+          return;
+        }
+
+        const symBtn = e.target.closest('[data-sym]');
+        if (symBtn) {
+          const codeInput = document.getElementById('codeInput');
+          codeInput.value += symBtn.dataset.sym;
+          codeInput.focus();
+          return;
+        }
+
+        const tagChip = e.target.closest('[data-tag]');
+        if (tagChip) {
+          const tag = tagChip.dataset.tag;
+          if (selectedTags.has(tag)) selectedTags.delete(tag);
+          else selectedTags.add(tag);
+          renderPresetTags();
+        }
+      });
     }
 
-    function saveToStorage() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
-      updateAddressDatalist();
-    }
-
-    function updateAddressDatalist() {
-      const datalist = document.getElementById('savedAddresses');
-      const uniqueAddresses = [...new Set(entries.map(e => e.address.trim()).filter(Boolean))];
-      datalist.innerHTML = uniqueAddresses
-        .map(addr => `<option value="${escapeHtml(addr)}"></option>`)
-        .join('');
+    function renderFilterBar() {
+      const bar = document.getElementById('filterBar');
+      bar.innerHTML = QUICK_FILTERS.map(f => {
+        const active = activeFilter === f ? 'active' : '';
+        return `<button type="button" class="filter-chip ${active}" data-filter="${escapeAttr(f)}">${escapeHtml(f)}</button>`;
+      }).join('');
     }
 
     function renderPresetTags() {
       const container = document.getElementById('presetTagsContainer');
       container.innerHTML = PRESET_TAGS.map(tag => {
         const active = selectedTags.has(tag) ? 'active' : '';
-        return `<div class="preset-chip ${active}" onclick="toggleTag('${escapeHtml(tag)}')">${escapeHtml(tag)}</div>`;
+        return `<div class="preset-chip ${active}" data-tag="${escapeAttr(tag)}">${escapeHtml(tag)}</div>`;
       }).join('');
     }
 
-    function toggleTag(tag) {
-      if (selectedTags.has(tag)) {
-        selectedTags.delete(tag);
-      } else {
-        selectedTags.add(tag);
+    function renderAddressSuggestions() {
+      const container = document.getElementById('addressSuggestions');
+      const val = normalizeText(document.getElementById('addressInput').value);
+      const uniqueMap = new Map();
+
+      entries.forEach(item => {
+        const key = normalizeAddressKey(item.address);
+        if (key && !uniqueMap.has(key)) {
+          uniqueMap.set(key, item.address.trim());
+        }
+      });
+
+      const allAddresses = Array.from(uniqueMap.values());
+      if (allAddresses.length === 0) {
+        container.innerHTML = '';
+        return;
       }
-      renderPresetTags();
+
+      const matches = allAddresses
+        .filter(addr => !val || normalizeText(addr).includes(val))
+        .filter(addr => normalizeText(addr) !== val)
+        .slice(0, 4);
+
+      container.innerHTML = matches
+        .map(addr => `<button type="button" class="addr-sug-chip" data-pick-address="${escapeAttr(addr)}">📍 ${escapeHtml(addr)}</button>`)
+        .join('');
     }
 
-    function appendSymbol(sym) {
-      const input = document.getElementById('codeInput');
-      input.value += sym;
-      input.focus();
-    }
-
-    function clearSearch() {
-      const searchInput = document.getElementById('searchInput');
-      searchInput.value = '';
-      document.getElementById('clearSearchBtn').classList.remove('visible');
-      renderList();
-      searchInput.focus();
-    }
-
-    // Отрисовка списка с группировкой по адресу
     function renderList() {
       const container = document.getElementById('listContainer');
-      const query = document.getElementById('searchInput').value.trim().toLowerCase();
+      const rawQuery = document.getElementById('searchInput').value;
+      const queryTokens = normalizeText(rawQuery).split(' ').filter(Boolean);
 
       const filtered = entries.filter(item => {
-        if (!query) return true;
-        const haystack = [
+        if (activeFilter !== 'Все') {
+          if (!item.tags || !item.tags.includes(activeFilter)) return false;
+        }
+        if (queryTokens.length === 0) return true;
+
+        const haystack = normalizeText([
           item.address,
           item.entrance,
           item.floorApt,
           item.code,
           item.note,
           ...(item.tags || [])
-        ].join(' ').toLowerCase();
-        return haystack.includes(query);
+        ].join(' '));
+
+        return queryTokens.every(token => haystack.includes(token));
       });
 
       document.getElementById('statsBadge').textContent = `${entries.length}`;
 
       if (filtered.length === 0) {
+        const isFiltered = queryTokens.length > 0 || activeFilter !== 'Все';
         container.innerHTML = `
           <div class="empty-state">
-            <div style="font-size:40px; margin-bottom:10px;">📭</div>
-            <div style="font-size:16px; font-weight:600; color:var(--text); margin-bottom:6px;">
-              ${query ? 'Ничего не найдено' : 'Пока нет сохранённых адресов'}
+            <div style="font-size:42px; margin-bottom:10px;">${isFiltered ? '📭' : '🔐'}</div>
+            <div style="font-size:16px; font-weight:700; color:var(--text); margin-bottom:6px;">
+              ${isFiltered ? 'Ничего не найдено' : 'База пуста'}
             </div>
-            <div>${query ? 'Попробуй другой запрос или добавь новый адрес кнопкой ниже.' : 'Нажми «+ Добавить адрес / код», чтобы записать первый подъезд.'}</div>
+            <div>${isFiltered
+              ? 'Попробуй другой запрос, сбрось фильтр или добавь новый адрес кнопкой ниже.'
+              : 'Добавь первый адрес вручную или вставь готовый код в разделе «📥 Код / База».'}</div>
           </div>
         `;
         return;
       }
 
-      // Группируем по нормализованному адресу, сохраняя порядок свежести
       const groupsMap = new Map();
       const sorted = [...filtered].sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
 
       sorted.forEach(item => {
-        const key = item.address.trim().toLowerCase();
+        const key = normalizeAddressKey(item.address) || item.address.trim().toLowerCase();
         if (!groupsMap.has(key)) {
           groupsMap.set(key, {
             displayAddress: item.address.trim(),
@@ -773,7 +1106,6 @@
 
       let html = '';
       groupsMap.forEach(group => {
-        // Сортируем подъезды внутри одного дома по номеру/названию
         group.items.sort((a, b) => (a.entrance || '').localeCompare(b.entrance || '', 'ru', { numeric: true }));
 
         const itemsHtml = group.items.map(item => {
@@ -781,9 +1113,10 @@
             ? `Подъезд / вход: <strong>${escapeHtml(item.entrance)}</strong>`
             : 'Основной вход';
           const floorInfo = item.floorApt ? ` · ${escapeHtml(item.floorApt)}` : '';
+          const dateStr = formatShortDate(item.updatedAt);
 
           const codeHtml = item.code
-            ? `<div class="code-box" onclick="copyCode('${escapeHtml(item.code)}')" title="Нажми, чтобы скопировать">
+            ? `<div class="code-box" data-copy-code="${escapeAttr(item.code)}" title="Нажми, чтобы скопировать">
                 <span>${escapeHtml(item.code)}</span>
                 <span class="copy-hint">📋</span>
                </div>`
@@ -805,8 +1138,9 @@
                   ${codeHtml}
                 </div>
                 <div class="item-actions">
-                  <button class="mini-btn" onclick="editEntry('${item.id}')" title="Изменить">✏️</button>
-                  <button class="mini-btn del" onclick="deleteEntry('${item.id}')" title="Удалить">🗑️</button>
+                  ${dateStr ? `<span class="date-label">${escapeHtml(dateStr)}</span>` : ''}
+                  <button type="button" class="mini-btn" data-edit-id="${escapeAttr(item.id)}" title="Изменить">✏️</button>
+                  <button type="button" class="mini-btn del" data-delete-id="${escapeAttr(item.id)}" title="Удалить">🗑️</button>
                 </div>
               </div>
               ${tagsHtml}
@@ -819,7 +1153,7 @@
           <div class="building-card">
             <div class="building-header">
               <div class="building-address">📍 ${escapeHtml(group.displayAddress)}</div>
-              <button class="add-entrance-btn" onclick="openFormModal('${escapeHtml(group.displayAddress)}')">+ Подъезд</button>
+              <button type="button" class="add-entrance-btn" data-add-address="${escapeAttr(group.displayAddress)}">+ Подъезд</button>
             </div>
             <div class="entrances-list">
               ${itemsHtml}
@@ -831,7 +1165,6 @@
       container.innerHTML = html;
     }
 
-    // Открытие формы (новая запись или добавление подъезда к существующему дому)
     function openFormModal(prefillAddress = '') {
       document.getElementById('entryForm').reset();
       document.getElementById('entryId').value = '';
@@ -844,6 +1177,7 @@
       if (prefillAddress) {
         document.getElementById('addressInput').value = prefillAddress;
       }
+      renderAddressSuggestions();
 
       document.getElementById('formModal').classList.add('open');
       setTimeout(() => {
@@ -869,6 +1203,7 @@
 
       selectedTags = new Set(item.tags || []);
       renderPresetTags();
+      renderAddressSuggestions();
 
       document.getElementById('formModal').classList.add('open');
     }
@@ -902,7 +1237,7 @@
         showToast('Запись обновлена');
       } else {
         entries.unshift({
-          id: String(Date.now()),
+          id: `${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
           address,
           entrance,
           floorApt,
@@ -920,44 +1255,65 @@
     }
 
     function deleteEntry(id) {
-      if (!confirm('Удалить эту запись?')) return;
+      lastDeletedSnapshot = [...entries];
       entries = entries.filter(item => item.id !== id);
       saveToStorage();
       renderList();
-      showToast('Удалено');
+      showToast('Запись удалена', true);
     }
 
-    function copyCode(code) {
+    function undoDelete() {
+      if (!lastDeletedSnapshot) return;
+      entries = lastDeletedSnapshot;
+      lastDeletedSnapshot = null;
+      saveToStorage();
+      renderList();
+      showToast('Запись восстановлена');
+    }
+
+    function copyText(text, successMsg) {
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(code).then(() => {
-          showToast(`Скопировано: ${code}`);
-        }).catch(() => fallbackCopy(code));
+        navigator.clipboard.writeText(text)
+          .then(() => showToast(successMsg))
+          .catch(() => fallbackCopy(text, successMsg));
       } else {
-        fallbackCopy(code);
+        fallbackCopy(text, successMsg);
       }
     }
 
-    function fallbackCopy(text) {
+    function fallbackCopy(text, successMsg) {
       const ta = document.createElement('textarea');
       ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      ta.style.opacity = '0';
       document.body.appendChild(ta);
       ta.select();
       document.execCommand('copy');
       document.body.removeChild(ta);
-      showToast(`Скопировано: ${text}`);
+      showToast(successMsg);
     }
 
-    function showToast(msg) {
+    function showToast(msg, allowUndo = false) {
       const toast = document.getElementById('toast');
-      toast.textContent = msg;
+      const undoBtn = document.getElementById('toastUndoBtn');
+      document.getElementById('toastText').textContent = msg;
+      undoBtn.style.display = allowUndo ? 'inline-block' : 'none';
+
       toast.classList.add('show');
       clearTimeout(window._toastTimer);
       window._toastTimer = setTimeout(() => {
         toast.classList.remove('show');
-      }, 2000);
+        if (!allowUndo) lastDeletedSnapshot = null;
+      }, allowUndo ? 5000 : 2200);
     }
 
     function openBackupModal() {
+      clearConfirmPending = false;
+      document.getElementById('clearAllBtn').textContent = '🗑️ Очистить всю базу на телефоне';
+      document.getElementById('backupInfoText').textContent =
+        `В памяти телефона сейчас: ${entries.length} зап.`;
       document.getElementById('backupModal').classList.add('open');
     }
 
@@ -965,48 +1321,164 @@
       document.getElementById(id).classList.remove('open');
     }
 
-    function backdropClose(e, id) {
-      if (e.target.id === id) closeModal(id);
+    // Разбор как компактного кода KEYDB:..., так и обычного JSON [...]
+    function parseCodePayload(rawInput) {
+      const trimmed = String(rawInput || '').trim();
+      if (!trimmed) throw new Error('Пустое поле');
+
+      let jsonText = trimmed;
+      if (trimmed.toUpperCase().startsWith(CODE_PREFIX)) {
+        const b64 = trimmed.slice(CODE_PREFIX.length).replace(/\s+/g, '');
+        jsonText = decodeBase64Utf8(b64);
+      } else {
+        // Исправляем типографские кавычки, если мессенджер их заменил
+        jsonText = trimmed
+          .replace(/[“”„]/g, '"')
+          .replace(/[‘’]/g, "'");
+      }
+
+      const parsed = JSON.parse(jsonText);
+      const list = Array.isArray(parsed) ? parsed : (Array.isArray(parsed.items) ? parsed.items : null);
+      if (!list) throw new Error('Неверный формат данных');
+
+      return list
+        .filter(item => item && (item.address || item.a))
+        .map((item, idx) => ({
+          id: String(item.id || `${Date.now()}-${idx}-${Math.random().toString(36).slice(2, 5)}`),
+          address: String(item.address || item.a || '').trim(),
+          entrance: String(item.entrance || item.e || '').trim(),
+          floorApt: String(item.floorApt || item.f || '').trim(),
+          code: String(item.code || item.c || '').trim(),
+          tags: Array.isArray(item.tags || item.t) ? (item.tags || item.t) : [],
+          note: String(item.note || item.n || '').trim(),
+          updatedAt: Number(item.updatedAt) || Date.now()
+        }));
     }
 
-    function exportData() {
+    function mergeEntries(incomingList) {
+      // Индексируем текущие записи по ID и по паре (нормализованный адрес + подъезд), чтобы не плодить дубли
+      const byId = new Map(entries.map(item => [item.id, item]));
+      const keyToId = new Map();
+
+      entries.forEach(item => {
+        const sig = `${normalizeAddressKey(item.address)}|${normalizeText(item.entrance)}`;
+        keyToId.set(sig, item.id);
+      });
+
+      let added = 0;
+      let updated = 0;
+
+      incomingList.forEach(item => {
+        const sig = `${normalizeAddressKey(item.address)}|${normalizeText(item.entrance)}`;
+        const existingId = byId.has(item.id) ? item.id : keyToId.get(sig);
+
+        if (existingId && byId.has(existingId)) {
+          const prev = byId.get(existingId);
+          byId.set(existingId, {
+            ...prev,
+            ...item,
+            id: existingId,
+            updatedAt: Date.now()
+          });
+          updated++;
+        } else {
+          byId.set(item.id, item);
+          keyToId.set(sig, item.id);
+          added++;
+        }
+      });
+
+      entries = Array.from(byId.values());
+      saveToStorage();
+      renderList();
+      return { added, updated };
+    }
+
+    function handleCodeImport() {
+      const area = document.getElementById('codeImportArea');
+      const raw = area.value.trim();
+      if (!raw) {
+        showToast('Сначала вставь код в поле');
+        area.focus();
+        return;
+      }
+
+      try {
+        const imported = parseCodePayload(raw);
+        if (imported.length === 0) {
+          showToast('В коде не найдено адресов');
+          return;
+        }
+        const { added, updated } = mergeEntries(imported);
+        area.value = '';
+        closeModal('backupModal');
+        showToast(`Готово: +${added} нов., ${updated} обн.`);
+      } catch (err) {
+        alert('Не удалось прочитать код. Проверь, что он скопирован полностью без обрезанных краёв.');
+      }
+    }
+
+    function copyShareableCode() {
+      if (entries.length === 0) {
+        showToast('База пока пуста — нечего копировать');
+        return;
+      }
+      const compactPayload = CODE_PREFIX + encodeBase64Utf8(JSON.stringify(entries));
+      copyText(compactPayload, `Код базы (${entries.length} зап.) скопирован!`);
+    }
+
+    function exportDataFile() {
+      if (entries.length === 0) {
+        showToast('База пока пуста');
+        return;
+      }
       const blob = new Blob([JSON.stringify(entries, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       const dateStr = new Date().toISOString().slice(0, 10);
       a.href = url;
-      a.download = `domofony_${dateStr}.json`;
+      a.download = `domofony_backup_${dateStr}.json`;
+      document.body.appendChild(a);
       a.click();
+      document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      showToast('Файл базы скачан');
+      showToast('Файл бэкапа скачан');
     }
 
-    function importData(e) {
+    function importDataFile(e) {
       const file = e.target.files[0];
       if (!file) return;
       const reader = new FileReader();
       reader.onload = function(evt) {
         try {
-          const imported = JSON.parse(evt.target.result);
-          if (!Array.isArray(imported)) throw new Error('Invalid format');
-          // Объединяем без дубликатов по id
-          const map = new Map(entries.map(item => [item.id, item]));
-          imported.forEach(item => {
-            if (item && item.address) {
-              map.set(item.id || String(Math.random()), item);
-            }
-          });
-          entries = Array.from(map.values());
-          saveToStorage();
-          renderList();
+          const imported = parseCodePayload(evt.target.result);
+          const { added, updated } = mergeEntries(imported);
           closeModal('backupModal');
-          showToast(`Загружено записей: ${entries.length}`);
+          showToast(`Файл загружен: +${added} нов., ${updated} обн.`);
         } catch (err) {
           alert('Ошибка: неверный формат файла резервной копии.');
         }
       };
       reader.readAsText(file);
       e.target.value = '';
+    }
+
+    function handleClearAll() {
+      if (entries.length === 0) {
+        showToast('База уже пуста');
+        return;
+      }
+      const btn = document.getElementById('clearAllBtn');
+      if (!clearConfirmPending) {
+        clearConfirmPending = true;
+        btn.textContent = '⚠️ Нажми ещё раз для полного удаления';
+        return;
+      }
+      entries = [];
+      saveToStorage();
+      renderList();
+      closeModal('backupModal');
+      showToast('База на телефоне очищена');
     }
 
     function escapeHtml(str) {
@@ -1016,6 +1488,10 @@
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#039;');
+    }
+
+    function escapeAttr(str) {
+      return escapeHtml(str);
     }
 
     init();
