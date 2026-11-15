@@ -908,6 +908,9 @@
 
     function init() {
       attachManifest();
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./sw.js').catch(() => {});
+      }
       loadLocalState();
       bindEvents();
       renderFilterBar();
