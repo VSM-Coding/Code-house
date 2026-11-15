@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#0f172a" />
+  <title>Курьер: Домофоны и Адреса</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔑</text></svg>">
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --card-inner: #0f172a;
+      --border: #334155;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-dark: #0284c7;
+      --code-bg: #172554;
+      --code-text: #7dd3fc;
+      --danger: #ef4444;
+      --success: #22c55e;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding-bottom: 96px;
+      line-height: 1.4;
+    }
+
+    /* Шапка и поиск */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 16px;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      max-width: 680px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .title {
+      font-size: 18px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .stats {
+      font-size: 12px;
+      color: var(--muted);
+      background: var(--card);
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .icon-btn {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 10px;
+      padding: 7px 10px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .icon-btn:active {
+      transform: scale(0.96);
+    }
+
+    .search-wrap {
+      position: relative;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .search-input {
+      width: 100%;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 16px;
+      padding: 12px 42px 12px 14px;
+      border-radius: 12px;
+      outline: none;
+    }
+
+    .search-input:focus {
+      border-color: var(--accent);
+    }
+
+    .clear-search {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--border);
+      color: var(--text);
+      border: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      font-size: 14px;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .clear-search.visible {
+      display: flex;
+    }
+
+    /* Основной контейнер */
+    main {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* Карточка дома */
+    .building-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .building-header {
+      padding: 12px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .building-address {
+      font-size: 17px;
+      font-weight: 700;
+      word-break: break-word;
+    }
+
+    .add-entrance-btn {
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--accent);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      border-radius: 10px;
+      padding: 6px 10px;
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .entrances-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .entrance-item {
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .entrance-item:last-child {
+      border-bottom: none;
+    }
+
+    .entrance-main {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .entrance-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .entrance-badge {
+      background: var(--card-inner);
+      border: 1px solid var(--border);
+      padding: 5px 10px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .code-box {
+      background: var(--code-bg);
+      color: var(--code-text);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      padding: 6px 12px;
+      border-radius: 10px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .code-box:active {
+      transform: scale(0.97);
+    }
+
+    .copy-hint {
+      font-size: 12px;
+      opacity: 0.8;
+    }
+
+    .item-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .mini-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      border-radius: 8px;
+      padding: 6px 9px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .mini-btn.del {
+      color: #fca5a5;
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+
+    .tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag-pill {
+      font-size: 12px;
+      background: rgba(148, 163, 184, 0.14);
+      color: #e2e8f0;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    .note-text {
+      font-size: 14px;
+      color: var(--muted);
+      background: rgba(15, 23, 42, 0.55);
+      padding: 8px 10px;
+      border-radius: 8px;
+      white-space: pre-wrap;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 48px 20px;
+      color: var(--muted);
+    }
+
+    /* Кнопка добавления (FAB) */
+    .fab {
+      position: fixed;
+      bottom: 22px;
+      right: 20px;
+      left: 20px;
+      max-width: 648px;
+      margin: 0 auto;
+      background: var(--accent);
+      color: #082f49;
+      border: none;
+      border-radius: 16px;
+      padding: 15px 20px;
+      font-size: 17px;
+      font-weight: 800;
+      box-shadow: 0 10px 25px rgba(2, 132, 199, 0.45);
+      cursor: pointer;
+      z-index: 15;
+    }
+
+    .fab:active {
+      transform: scale(0.98);
+    }
+
+    /* Модальное окно */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 6, 23, 0.8);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      z-index: 50;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--card);
+      width: 100%;
+      max-width: 680px;
+      border-radius: 22px 22px 0 0;
+      border-top: 1px solid var(--border);
+      padding: 20px 18px 28px;
+      max-height: 92vh;
+      overflow-y: auto;
+    }
+
+    @media (min-width: 640px) {
+      .modal-backdrop {
+        align-items: center;
+        padding: 16px;
+      }
+      .modal {
+        border-radius: 20px;
+        border: 1px solid var(--border);
+      }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    input[type="text"], textarea {
+      width: 100%;
+      background: var(--card-inner);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 16px;
+      padding: 11px 12px;
+      border-radius: 12px;
+      outline: none;
+      font-family: inherit;
+    }
+
+    input[type="text"]:focus, textarea:focus {
+      border-color: var(--accent);
+    }
+
+    .row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .quick-symbols {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .sym-btn {
+      flex: 1;
+      background: var(--card-inner);
+      border: 1px solid var(--border);
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 16px;
+      padding: 8px 0;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .sym-btn:active {
+      background: var(--border);
+    }
+
+    .preset-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .preset-chip {
+      background: var(--card-inner);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 7px 11px;
+      border-radius: 10px;
+      font-size: 13px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .preset-chip.active {
+      background: rgba(56, 189, 248, 0.2);
+      border-color: var(--accent);
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .save-btn {
+      width: 100%;
+      background: var(--accent);
+      color: #082f49;
+      border: none;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      margin-top: 6px;
+    }
+
+    /* Уведомление */
+    .toast {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-80px);
+      background: var(--success);
+      color: #052e16;
+      font-weight: 700;
+      padding: 10px 18px;
+      border-radius: 999px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+      transition: transform 0.25s ease;
+      z-index: 100;
+      font-size: 14px;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .backup-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .backup-btn {
+      width: 100%;
+      padding: 13px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--card-inner);
+      color: var(--text);
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="top-bar">
+      <div class="title">🔑 База домофонов <span class="stats" id="statsBadge">0</span></div>
+      <div class="header-actions">
+        <button class="icon-btn" onclick="openBackupModal()" title="Резервная копия">💾 База</button>
+      </div>
+    </div>
+    <div class="search-wrap">
+      <input
+        type="text"
+        id="searchInput"
+        class="search-input"
+        placeholder="Поиск: улица, дом, код или заметка..."
+        autocomplete="off"
+      />
+      <button class="clear-search" id="clearSearchBtn" onclick="clearSearch()">✕</button>
+    </div>
+  </header>
+
+  <main id="listContainer"></main>
+
+  <button class="fab" onclick="openFormModal()">+ Добавить адрес / код</button>
+
+  <!-- Модалка добавления/редактирования -->
+  <div class="modal-backdrop" id="formModal" onclick="backdropClose(event, 'formModal')">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title" id="formTitle">Новая запись</div>
+        <button class="icon-btn" onclick="closeModal('formModal')">✕</button>
+      </div>
+
+      <form id="entryForm" onsubmit="saveEntry(event)">
+        <input type="hidden" id="entryId" />
+
+        <div class="form-group">
+          <label for="addressInput">Адрес (улица, дом) *</label>
+          <input
+            type="text"
+            id="addressInput"
+            list="savedAddresses"
+            placeholder="Например: ул. Ленина, 15"
+            required
+          />
+          <datalist id="savedAddresses"></datalist>
+        </div>
+
+        <div class="row-2">
+          <div class="form-group">
+            <label for="entranceInput">Подъезд / Вход</label>
+            <input type="text" id="entranceInput" placeholder="2, Калитка, Двор..." />
+          </div>
+          <div class="form-group">
+            <label for="floorAptInput">Этаж / Кв. (необяз.)</label>
+            <input type="text" id="floorAptInput" placeholder="5 эт, кв 42" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="codeInput">Код от домофона / ворот</label>
+          <input type="text" id="codeInput" placeholder="Например: #4512 или 12К3456" />
+          <div class="quick-symbols">
+            <button type="button" class="sym-btn" onclick="appendSymbol('#')">#</button>
+            <button type="button" class="sym-btn" onclick="appendSymbol('*')">*</button>
+            <button type="button" class="sym-btn" onclick="appendSymbol('К')">К</button>
+            <button type="button" class="sym-btn" onclick="appendSymbol('В')">В</button>
+            <button type="button" class="sym-btn" onclick="appendSymbol('B')">B</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Быстрые метки</label>
+          <div class="preset-tags" id="presetTagsContainer"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="noteInput">Заметка (как пройти, охрана, нюансы)</label>
+          <textarea id="noteInput" rows="2" placeholder="Вход со двора, дверь слева..."></textarea>
+        </div>
+
+        <button type="submit" class="save-btn">Сохранить</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Модалка экспорта/импорта -->
+  <div class="modal-backdrop" id="backupModal" onclick="backdropClose(event, 'backupModal')">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">Резервная копия базы</div>
+        <button class="icon-btn" onclick="closeModal('backupModal')">✕</button>
+      </div>
+      <div class="backup-panel">
+        <p style="margin:0; font-size:14px; color:var(--muted);">
+          Все адреса хранятся прямо в вашем телефоне. Скачивайте копию раз в пару недель, чтобы не потерять базу.
+        </p>
+        <button class="backup-btn" onclick="exportData()">⬇️ Скачать файл базы (.json)</button>
+        <label class="backup-btn" style="cursor:pointer;">
+          ⬆️ Загрузить из файла (.json)
+          <input type="file" accept=".json" onchange="importData(event)" style="display:none;" />
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Скопировано!</div>
+
+  <script>
+    const STORAGE_KEY = 'courier_intercom_db_v1';
+    const PRESET_TAGS = [
+      '🔑 Вездеход',
+      '🚧 Шлагбаум',
+      '🚪 Калитка',
+      '👮 Охрана / Консьерж',
+      '📦 Оставлять у двери',
+      '🐕 Собака',
+      '⚠️ Не работает'
+    ];
+
+    let entries = [];
+    let selectedTags = new Set();
+
+    // Инициализация
+    function init() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        try {
+          entries = JSON.parse(raw);
+        } catch (e) {
+          entries = [];
+        }
+      } else {
+        // Стартовые примеры при первом запуске
+        entries = [
+          {
+            id: 'demo-1',
+            address: 'ул. Примерная, 10',
+            entrance: '1',
+            floorApt: '',
+            code: '#4815',
+            tags: ['🔑 Вездеход'],
+            note: 'Пример записи. Нажми на код, чтобы скопировать, или удали карточку.',
+            updatedAt: Date.now()
+          },
+          {
+            id: 'demo-2',
+            address: 'ул. Примерная, 10',
+            entrance: 'Калитка',
+            floorApt: '',
+            code: '*1234#',
+            tags: ['🚪 Калитка'],
+            note: 'Вход со стороны парковки',
+            updatedAt: Date.now() - 1000
+          }
+        ];
+        saveToStorage();
+      }
+
+      renderPresetTags();
+      renderList();
+      updateAddressDatalist();
+
+      const searchInput = document.getElementById('searchInput');
+      searchInput.addEventListener('input', () => {
+        document.getElementById('clearSearchBtn').classList.toggle('visible', searchInput.value.length > 0);
+        renderList();
+      });
+    }
+
+    function saveToStorage() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+      updateAddressDatalist();
+    }
+
+    function updateAddressDatalist() {
+      const datalist = document.getElementById('savedAddresses');
+      const uniqueAddresses = [...new Set(entries.map(e => e.address.trim()).filter(Boolean))];
+      datalist.innerHTML = uniqueAddresses
+        .map(addr => `<option value="${escapeHtml(addr)}"></option>`)
+        .join('');
+    }
+
+    function renderPresetTags() {
+      const container = document.getElementById('presetTagsContainer');
+      container.innerHTML = PRESET_TAGS.map(tag => {
+        const active = selectedTags.has(tag) ? 'active' : '';
+        return `<div class="preset-chip ${active}" onclick="toggleTag('${escapeHtml(tag)}')">${escapeHtml(tag)}</div>`;
+      }).join('');
+    }
+
+    function toggleTag(tag) {
+      if (selectedTags.has(tag)) {
+        selectedTags.delete(tag);
+      } else {
+        selectedTags.add(tag);
+      }
+      renderPresetTags();
+    }
+
+    function appendSymbol(sym) {
+      const input = document.getElementById('codeInput');
+      input.value += sym;
+      input.focus();
+    }
+
+    function clearSearch() {
+      const searchInput = document.getElementById('searchInput');
+      searchInput.value = '';
+      document.getElementById('clearSearchBtn').classList.remove('visible');
+      renderList();
+      searchInput.focus();
+    }
+
+    // Отрисовка списка с группировкой по адресу
+    function renderList() {
+      const container = document.getElementById('listContainer');
+      const query = document.getElementById('searchInput').value.trim().toLowerCase();
+
+      const filtered = entries.filter(item => {
+        if (!query) return true;
+        const haystack = [
+          item.address,
+          item.entrance,
+          item.floorApt,
+          item.code,
+          item.note,
+          ...(item.tags || [])
+        ].join(' ').toLowerCase();
+        return haystack.includes(query);
+      });
+
+      document.getElementById('statsBadge').textContent = `${entries.length}`;
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div style="font-size:40px; margin-bottom:10px;">📭</div>
+            <div style="font-size:16px; font-weight:600; color:var(--text); margin-bottom:6px;">
+              ${query ? 'Ничего не найдено' : 'Пока нет сохранённых адресов'}
+            </div>
+            <div>${query ? 'Попробуй другой запрос или добавь новый адрес кнопкой ниже.' : 'Нажми «+ Добавить адрес / код», чтобы записать первый подъезд.'}</div>
+          </div>
+        `;
+        return;
+      }
+
+      // Группируем по нормализованному адресу, сохраняя порядок свежести
+      const groupsMap = new Map();
+      const sorted = [...filtered].sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
+
+      sorted.forEach(item => {
+        const key = item.address.trim().toLowerCase();
+        if (!groupsMap.has(key)) {
+          groupsMap.set(key, {
+            displayAddress: item.address.trim(),
+            items: []
+          });
+        }
+        groupsMap.get(key).items.push(item);
+      });
+
+      let html = '';
+      groupsMap.forEach(group => {
+        // Сортируем подъезды внутри одного дома по номеру/названию
+        group.items.sort((a, b) => (a.entrance || '').localeCompare(b.entrance || '', 'ru', { numeric: true }));
+
+        const itemsHtml = group.items.map(item => {
+          const entranceLabel = item.entrance
+            ? `Подъезд / вход: <strong>${escapeHtml(item.entrance)}</strong>`
+            : 'Основной вход';
+          const floorInfo = item.floorApt ? ` · ${escapeHtml(item.floorApt)}` : '';
+
+          const codeHtml = item.code
+            ? `<div class="code-box" onclick="copyCode('${escapeHtml(item.code)}')" title="Нажми, чтобы скопировать">
+                <span>${escapeHtml(item.code)}</span>
+                <span class="copy-hint">📋</span>
+               </div>`
+            : `<span style="color:var(--muted); font-size:13px;">Без кода</span>`;
+
+          const tagsHtml = (item.tags && item.tags.length > 0)
+            ? `<div class="tags-row">${item.tags.map(t => `<span class="tag-pill">${escapeHtml(t)}</span>`).join('')}</div>`
+            : '';
+
+          const noteHtml = item.note
+            ? `<div class="note-text">${escapeHtml(item.note)}</div>`
+            : '';
+
+          return `
+            <div class="entrance-item">
+              <div class="entrance-main">
+                <div class="entrance-left">
+                  <span class="entrance-badge">${entranceLabel}${floorInfo}</span>
+                  ${codeHtml}
+                </div>
+                <div class="item-actions">
+                  <button class="mini-btn" onclick="editEntry('${item.id}')" title="Изменить">✏️</button>
+                  <button class="mini-btn del" onclick="deleteEntry('${item.id}')" title="Удалить">🗑️</button>
+                </div>
+              </div>
+              ${tagsHtml}
+              ${noteHtml}
+            </div>
+          `;
+        }).join('');
+
+        html += `
+          <div class="building-card">
+            <div class="building-header">
+              <div class="building-address">📍 ${escapeHtml(group.displayAddress)}</div>
+              <button class="add-entrance-btn" onclick="openFormModal('${escapeHtml(group.displayAddress)}')">+ Подъезд</button>
+            </div>
+            <div class="entrances-list">
+              ${itemsHtml}
+            </div>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    // Открытие формы (новая запись или добавление подъезда к существующему дому)
+    function openFormModal(prefillAddress = '') {
+      document.getElementById('entryForm').reset();
+      document.getElementById('entryId').value = '';
+      document.getElementById('formTitle').textContent = prefillAddress
+        ? 'Добавить подъезд / код'
+        : 'Новый адрес';
+      selectedTags = new Set();
+      renderPresetTags();
+
+      if (prefillAddress) {
+        document.getElementById('addressInput').value = prefillAddress;
+      }
+
+      document.getElementById('formModal').classList.add('open');
+      setTimeout(() => {
+        if (prefillAddress) {
+          document.getElementById('entranceInput').focus();
+        } else {
+          document.getElementById('addressInput').focus();
+        }
+      }, 100);
+    }
+
+    function editEntry(id) {
+      const item = entries.find(e => e.id === id);
+      if (!item) return;
+
+      document.getElementById('entryId').value = item.id;
+      document.getElementById('formTitle').textContent = 'Редактировать запись';
+      document.getElementById('addressInput').value = item.address || '';
+      document.getElementById('entranceInput').value = item.entrance || '';
+      document.getElementById('floorAptInput').value = item.floorApt || '';
+      document.getElementById('codeInput').value = item.code || '';
+      document.getElementById('noteInput').value = item.note || '';
+
+      selectedTags = new Set(item.tags || []);
+      renderPresetTags();
+
+      document.getElementById('formModal').classList.add('open');
+    }
+
+    function saveEntry(e) {
+      e.preventDefault();
+      const id = document.getElementById('entryId').value;
+      const address = document.getElementById('addressInput').value.trim();
+      const entrance = document.getElementById('entranceInput').value.trim();
+      const floorApt = document.getElementById('floorAptInput').value.trim();
+      const code = document.getElementById('codeInput').value.trim();
+      const note = document.getElementById('noteInput').value.trim();
+      const tags = Array.from(selectedTags);
+
+      if (!address) return;
+
+      if (id) {
+        const idx = entries.findIndex(item => item.id === id);
+        if (idx !== -1) {
+          entries[idx] = {
+            ...entries[idx],
+            address,
+            entrance,
+            floorApt,
+            code,
+            tags,
+            note,
+            updatedAt: Date.now()
+          };
+        }
+        showToast('Запись обновлена');
+      } else {
+        entries.unshift({
+          id: String(Date.now()),
+          address,
+          entrance,
+          floorApt,
+          code,
+          tags,
+          note,
+          updatedAt: Date.now()
+        });
+        showToast('Сохранено!');
+      }
+
+      saveToStorage();
+      renderList();
+      closeModal('formModal');
+    }
+
+    function deleteEntry(id) {
+      if (!confirm('Удалить эту запись?')) return;
+      entries = entries.filter(item => item.id !== id);
+      saveToStorage();
+      renderList();
+      showToast('Удалено');
+    }
+
+    function copyCode(code) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(code).then(() => {
+          showToast(`Скопировано: ${code}`);
+        }).catch(() => fallbackCopy(code));
+      } else {
+        fallbackCopy(code);
+      }
+    }
+
+    function fallbackCopy(text) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      showToast(`Скопировано: ${text}`);
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2000);
+    }
+
+    function openBackupModal() {
+      document.getElementById('backupModal').classList.add('open');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('open');
+    }
+
+    function backdropClose(e, id) {
+      if (e.target.id === id) closeModal(id);
+    }
+
+    function exportData() {
+      const blob = new Blob([JSON.stringify(entries, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      const dateStr = new Date().toISOString().slice(0, 10);
+      a.href = url;
+      a.download = `domofony_${dateStr}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('Файл базы скачан');
+    }
+
+    function importData(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        try {
+          const imported = JSON.parse(evt.target.result);
+          if (!Array.isArray(imported)) throw new Error('Invalid format');
+          // Объединяем без дубликатов по id
+          const map = new Map(entries.map(item => [item.id, item]));
+          imported.forEach(item => {
+            if (item && item.address) {
+              map.set(item.id || String(Math.random()), item);
+            }
+          });
+          entries = Array.from(map.values());
+          saveToStorage();
+          renderList();
+          closeModal('backupModal');
+          showToast(`Загружено записей: ${entries.length}`);
+        } catch (err) {
+          alert('Ошибка: неверный формат файла резервной копии.');
+        }
+      };
+      reader.readAsText(file);
+      e.target.value = '';
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    init();
+  </script>
+</body>
+</html>
