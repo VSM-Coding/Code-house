@@ -19,7 +19,8 @@
       --muted: #94a3b8;
       --accent: #38bdf8;
       --code-bg: #172554;
-      --code-text: #7dd3fc;
+      --code-digit: #e0f2fe;
+      --code-sym: #fbbf24;
       --danger: #ef4444;
       --success: #22c55e;
     }
@@ -270,16 +271,17 @@
       font-size: 14px;
     }
 
+    /* Оформление кода домофона: цифры и буквы/символы разного цвета */
     .code-box {
       background: var(--code-bg);
-      color: var(--code-text);
+      color: var(--code-digit);
       border: 1px solid rgba(56, 189, 248, 0.45);
       padding: 6px 13px;
       border-radius: 10px;
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 20px;
+      font-size: 21px;
       font-weight: 800;
-      letter-spacing: 0.5px;
+      letter-spacing: 1px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
@@ -289,6 +291,23 @@
 
     .code-box:active {
       transform: scale(0.96);
+    }
+
+    .code-tokens {
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .code-digit {
+      color: var(--code-digit);
+    }
+
+    .code-sym {
+      color: var(--code-sym);
+      background: rgba(251, 191, 36, 0.16);
+      border-radius: 4px;
+      padding: 0 2px;
+      margin: 0 1px;
     }
 
     .copy-hint {
@@ -499,7 +518,7 @@
       flex: 1;
       background: var(--card-inner);
       border: 1px solid var(--border);
-      color: var(--accent);
+      color: var(--code-sym);
       font-weight: 800;
       font-size: 16px;
       padding: 9px 0;
@@ -802,7 +821,6 @@
     ];
     const QUICK_FILTERS = ['Все', '🔑 Вездеход', '🚧 Шлагбаум', '🚪 Калитка', '⚠️ Не работает'];
 
-    // Изначально база полностью пуста
     let entries = [];
     let selectedTags = new Set();
     let activeFilter = 'Все';
@@ -873,6 +891,16 @@
       return `${d.getDate()} ${months[d.getMonth()]}`;
     }
 
+    // Подсветка цифр и букв/спецсимволов разными цветами
+    function formatColoredCode(code) {
+      return Array.from(String(code || '')).map(ch => {
+        if (ch === ' ') return ' ';
+        const isDigit = /^[0-9]$/.test(ch);
+        const cls = isDigit ? 'code-digit' : 'code-sym';
+        return `<span class="${cls}">${escapeHtml(ch)}</span>`;
+      }).join('');
+    }
+
     function loadLocalState() {
       try {
         const raw = localStorage.getItem(STORAGE_KEY);
@@ -925,7 +953,6 @@
         });
       });
 
-      // Кнопки загрузки кода и бэкапа
       document.getElementById('applyCodeBtn').addEventListener('click', handleCodeImport);
       document.getElementById('copyCodeBtn').addEventListener('click', copyShareableCode);
       document.getElementById('exportFileBtn').addEventListener('click', exportDataFile);
@@ -933,7 +960,6 @@
       document.getElementById('clearAllBtn').addEventListener('click', handleClearAll);
       document.getElementById('toastUndoBtn').addEventListener('click', undoDelete);
 
-      // Единый обработчик кликов
       document.addEventListener('click', (e) => {
         const closeTarget = e.target.closest('[data-close-modal]');
         if (closeTarget) {
@@ -1117,7 +1143,7 @@
 
           const codeHtml = item.code
             ? `<div class="code-box" data-copy-code="${escapeAttr(item.code)}" title="Нажми, чтобы скопировать">
-                <span>${escapeHtml(item.code)}</span>
+                <span class="code-tokens">${formatColoredCode(item.code)}</span>
                 <span class="copy-hint">📋</span>
                </div>`
             : `<span style="color:var(--muted); font-size:13px;">Без кода</span>`;
@@ -1321,7 +1347,6 @@
       document.getElementById(id).classList.remove('open');
     }
 
-    // Разбор как компактного кода KEYDB:..., так и обычного JSON [...]
     function parseCodePayload(rawInput) {
       const trimmed = String(rawInput || '').trim();
       if (!trimmed) throw new Error('Пустое поле');
@@ -1331,7 +1356,6 @@
         const b64 = trimmed.slice(CODE_PREFIX.length).replace(/\s+/g, '');
         jsonText = decodeBase64Utf8(b64);
       } else {
-        // Исправляем типографские кавычки, если мессенджер их заменил
         jsonText = trimmed
           .replace(/[“”„]/g, '"')
           .replace(/[‘’]/g, "'");
@@ -1356,7 +1380,6 @@
     }
 
     function mergeEntries(incomingList) {
-      // Индексируем текущие записи по ID и по паре (нормализованный адрес + подъезд), чтобы не плодить дубли
       const byId = new Map(entries.map(item => [item.id, item]));
       const keyToId = new Map();
 
