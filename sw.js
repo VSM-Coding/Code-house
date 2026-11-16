@@ -1,4 +1,4 @@
-const CACHE_NAME = 'courier-domofony-v1';
+const CACHE_NAME = 'courier-domofony-v2';
 const ASSETS = ['./', './index.html'];
 
 self.addEventListener('install', (e) => {
