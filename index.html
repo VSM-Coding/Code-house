@@ -115,7 +115,7 @@
       border: 1px solid var(--border);
       color: var(--text);
       font-size: 16px;
-      padding: 11px 42px 11px 14px;
+      padding: 11px 78px 11px 14px;
       border-radius: 12px;
       outline: none;
     }
@@ -124,26 +124,40 @@
       border-color: var(--accent);
     }
 
-    .clear-search {
+    .search-controls {
       position: absolute;
       right: 8px;
       top: 50%;
       transform: translateY(-50%);
+      display: none;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .search-controls.visible {
+      display: flex;
+    }
+
+    .search-ctrl-btn {
       background: var(--border);
       color: var(--text);
       border: none;
-      width: 28px;
       height: 28px;
-      border-radius: 50%;
-      font-size: 14px;
+      min-width: 28px;
+      padding: 0 7px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
       cursor: pointer;
-      display: none;
+      display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    .clear-search.visible {
-      display: flex;
+    .search-ctrl-btn.hide-kb {
+      background: rgba(56, 189, 248, 0.22);
+      color: var(--accent);
+      border: 1px solid rgba(56, 189, 248, 0.4);
     }
 
     /* Быстрые фильтры */
@@ -188,6 +202,7 @@
       display: flex;
       flex-direction: column;
       gap: 14px;
+      min-height: 65vh;
     }
 
     /* Карточка дома */
@@ -682,10 +697,14 @@
         type="text"
         id="searchInput"
         class="search-input"
+        enterkeyhint="search"
         placeholder="Поиск: улица, дом, подъезд или код..."
         autocomplete="off"
       />
-      <button type="button" class="clear-search" id="clearSearchBtn" aria-label="Очистить">✕</button>
+      <div class="search-controls" id="searchControls">
+        <button type="button" class="search-ctrl-btn hide-kb" id="hideKeyboardBtn" aria-label="Свернуть клавиатуру">⌨️⬇️</button>
+        <button type="button" class="search-ctrl-btn" id="clearSearchBtn" aria-label="Очистить">✕</button>
+      </div>
     </div>
     <div class="filter-bar" id="filterBar"></div>
   </header>
@@ -918,19 +937,48 @@
       renderList();
     }
 
+    function dismissSearchKeyboard() {
+      const searchInput = document.getElementById('searchInput');
+      if (document.activeElement === searchInput) {
+        searchInput.blur();
+      }
+    }
+
     function bindEvents() {
       const searchInput = document.getElementById('searchInput');
+      const searchControls = document.getElementById('searchControls');
+      const listContainer = document.getElementById('listContainer');
+
       searchInput.addEventListener('input', () => {
-        document.getElementById('clearSearchBtn').classList.toggle('visible', searchInput.value.length > 0);
+        searchControls.classList.toggle('visible', searchInput.value.length > 0);
         renderList();
+      });
+
+      searchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          dismissSearchKeyboard();
+        }
+      });
+
+      document.getElementById('hideKeyboardBtn').addEventListener('click', () => {
+        dismissSearchKeyboard();
       });
 
       document.getElementById('clearSearchBtn').addEventListener('click', () => {
         searchInput.value = '';
-        document.getElementById('clearSearchBtn').classList.remove('visible');
+        searchControls.classList.remove('visible');
         renderList();
         searchInput.focus();
       });
+
+      // Автоматически убираем клавиатуру при касании списка или прокрутке результатов
+      listContainer.addEventListener('touchstart', dismissSearchKeyboard, { passive: true });
+      window.addEventListener('scroll', () => {
+        if (document.activeElement === searchInput && window.scrollY > 10) {
+          dismissSearchKeyboard();
+        }
+      }, { passive: true });
 
       document.getElementById('openAddBtn').addEventListener('click', () => openFormModal());
       document.getElementById('openBackupBtn').addEventListener('click', openBackupModal);
@@ -969,6 +1017,7 @@
 
         const filterChip = e.target.closest('[data-filter]');
         if (filterChip) {
+          dismissSearchKeyboard();
           activeFilter = filterChip.dataset.filter;
           renderFilterBar();
           renderList();
@@ -977,6 +1026,7 @@
 
         const copyBtn = e.target.closest('[data-copy-code]');
         if (copyBtn) {
+          dismissSearchKeyboard();
           copyText(copyBtn.dataset.copyCode, `Скопировано: ${copyBtn.dataset.copyCode}`);
           return;
         }
